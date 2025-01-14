@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eloquium</title>
+  <link rel="shortcut icon" href="logo white.png" type="image/x-icon">
+  
+  <!-- Embedded CSS -->
+  <style>
+    /*Manjari Font import*/
+
+      @import url('https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&display=swap');
+      .manjari-thin {
+        font-family: "Manjari", serif;
+        font-weight: 100;
+        font-style: normal;
+      }
+      
+      .manjari-regular {
+        font-family: "Manjari", serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+      
+      .manjari-bold {
+        font-family: "Manjari", serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+      
+    /* General styling for the layout */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #F5F5DC;
+      overflow-x: hidden; /* Prevent horizontal scroll */
+      font-family: 'Manjari';
+    }
+
+    header {
+      display: flex;
+      justify-content: center;  /* Center the header content */
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #8B0000;
+      color: white;
+      position: relative;
+      z-index: 1;
+      flex-direction: column; /* Stack logo and search bar vertically */
+    }
+
+    header .logo h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    /* Search Container */
+    .search-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-top: 10px; /* space between header logo and search bar */
+      width: 100%; /* Ensure it spans across the container */
+    }
+
+    /* Mobile & Desktop shared styles for the search input */
+    .search-container input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      width: 0; /* Initially hidden on mobile */
+      visibility: hidden; /* Initially hidden */
+      opacity: 0; /* Initially hidden */
+      transition: width 0.3s ease, visibility 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Button styles for the search icon */
+    .search-container button {
+      padding: 10px;
+      margin-left: 10px;
+      background-color: #e35336;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      display: block;
+    }
+
+    .search-container button:hover {
+      background-color: #e07b00;
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 768px) {
+      .search-container button {
+        font-size: 24px; /* Bigger icon */
+        padding: 10px;
+        background-color: transparent;
+        border: none;
+      }
+
+      .search-container button:focus {
+        outline: none;
+      }
+
+      .search-container button::before {
+        content: "🔍"; /* Unicode search icon */
+        font-size: 24px;
+        color: white;
+      }
+
+      /* Expand the search bar when open */
+      .search-container.open input {
+        visibility: visible;
+        opacity: 1;
+        width: 200px; /* Expand the width of the search bar */
+      }
+
+      .search-container.open button::before {
+        content: "×"; /* Change icon to close (X) when search bar is open */
+      }
+    }
+
+    /* Desktop-specific styles */
+    @media (min-width: 769px) {
+      .search-container input {
+        visibility: visible; /* Always visible on desktop */
+        opacity: 1;
+        width: 250px; /* Default width of search bar */
+        transition: width 0.3s ease;
+      }
+
+      .search-container button::before {
+        content: "🔍"; /* Show search icon in desktop view */
+      }
+    }
+
+    /* Banner Section */
+    .banner {
+      background-color: #f0f0f0;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .featured-article {
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden; /* Ensure no overflow of content */
+      height: 300px; /* Set a fixed height for the banner */
+    }
+
+    .featured-article img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Ensures the image covers the div area without distortion */
+      object-position: center; /* Ensures the image is centered */
+    }
+
+    .featured-details {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      color: white;
+    }
+
+    .featured-details h3 {
+      margin: 0;
+      color: #fff;
+    }
+
+    .featured-details p {
+      color: #fff;
+    }
+
+    /* Articles Container */
+    .articles-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin: 20px;
+    }
+
+    .article-card {
+      width: 30%;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .article-card:hover {
+      transform: scale(1.05);
+    }
+
+    .article-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .article-card .article-title {
+      padding: 15px;
+      font-size: 20px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .article-card .article-description {
+      padding: 0 15px 15px;
+      color: #777;
+    }
+    .auth{
+      color: #777;
+      font-size:15px;
+    }
+    a{
+      text-decoration: none;
+    }
+    /* Responsiveness */
+    @media (max-width: 768px) {
+      .articles-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .article-card {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <img src="logo white.png" alt="" style="width:100px;display: block;margin-left: auto;margin-right: auto;margin-bottom: 10px;">
+      <h1>Eloquium</h1>
+    </div>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search articles..." oninput="searchArticles()">
+      <button id="searchButton" onclick="toggleSearchBar()"></button>
+    </div>
+  </header>
+
+  <!-- Banner Section -->
+  <div class="banner">
+    <h2>Featured Articles</h2>
+    <div class="featured-article">
+      <img src="https://cdn.pixabay.com/photo/2020/04/20/11/03/ink-5067880_1280.jpg" alt="Featured Article Image">
+      <div class="featured-details">
+        <h3>The Power of Words: Shaping Culture and Creativity</h3>
+        <p>The story of our inspiration, words from our chief-editor Muhammed Najah P</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Cards Section -->
+  <div class="articles-container">
+    <div class="article-card" data-title="Manass" data-desc="An article about the mind">
+      <img src="article1.jpg" alt="Article Image">
+      <h3 class="article-title">മനസ്സ് <span class="auth">Najah Palengara</span></h3>
+      <p class="article-description">An article about the mind and mental health...</p>
+    </div>
+    <div class="article-card" data-title="The Power of Words" data-desc="he story of our inspiration">
+      <a href="https://telegra.ph/article-1-01-09"><img src="https://cdn.pixabay.com/photo/2020/04/20/11/03/ink-5067880_1280.jpg" alt="Article Image"></a>
+      <h3 class="article-title">The Power of Words: Shaping Culture and Creativity<span class="auth">Najah Palengara</span></h3>
+      <p class="article-description">The story of our inspiration, words from our chief-editor Muhammed Najah P</p>
+    </div>
+    <!-- Add more article cards as you wish -->
+  </div>
+
+  <!---Footer-->
+  <footer style="background-color: #333; color: #fff; padding: 30px 0; text-align: center; font-family: Manjari;">
+    <!-- Logo Section -->
+    <div>
+        <img src="logo white.png" alt="Magazine Logo" style="max-width: 150px; height: auto;">
+    </div>
+    
+    <!-- Call to Action Section -->
+    <div style="margin-top: 20px;">
+        <p>Send us your creations through this mail:</p>
+        <a href="mailto:Eloquiummag@gmail.com" style="color: #fff; text-decoration: none; font-weight: bold;">Eloquiummag@gmail.com</a>
+    </div>
+    
+    <!-- Short Note Section -->
+    <div style="margin-top: 20px; font-size: 14px;">
+        <p><em>Eloquium is a non-profit web magazine run by Suhba Friends, Darul Huda Islamic University 38<sup>th</sup> Batch student's union.</em></p>
+    </div>
+    
+    <!-- Social Media Links or Additional Info -->
+    <div style="margin-top: 20px;">
+        <a href="#" style="color: #fff; margin: 0 10px;">Facebook</a>
+        <a href="#" style="color: #fff; margin: 0 10px;">Twitter</a>
+        <a href="#" style="color: #fff; margin: 0 10px;">Instagram</a>
+    </div>
+    
+    <!-- Copyright Section -->
+    <div style="margin-top: 30px; font-size: 12px;">
+        <p>&copy; 2025 Eloquium Magazine. All rights reserved.</p>
+    </div>
+</footer>
+
+
+  <!-- Embedded JavaScript -->
+  <script>
+    // Manglish to Malayalam transliteration mapping (simplified)
+    const manglishToMalayalam = {
+      "manass": "മനസ്സ്",
+      "kavitha": "കവിത",
+      // Add more mappings as needed
+    };
+
+    // Simulate article data
+    const articles = [
+      
+      // More articles here
+    ];
+
+    function searchArticles() {
+      const searchInput = document.getElementById("searchInput").value.toLowerCase();
+      const results = document.querySelectorAll(".article-card");
+
+      // Loop through articles and hide or show based on search input
+      results.forEach(article => {
+        const articleTitle = article.getAttribute("data-title").toLowerCase();
+        const articleDesc = article.getAttribute("data-desc").toLowerCase();
+        const isSearchMatch = articleTitle.includes(searchInput) || articleDesc.includes(searchInput);
+
+        if (isSearchMatch || manglishToMalayalam[searchInput]) {
+          article.style.display = "block";
+        } else {
+          article.style.display = "none";
+        }
+      });
+    }
+
+    // Toggle search bar on mobile
+    function toggleSearchBar() {
+      const searchContainer = document.querySelector(".search-container");
+      searchContainer.classList.toggle("open");
+      const searchInput = document.getElementById("searchInput");
+      if (searchContainer.classList.contains("open")) {
+        searchInput.focus();
+      } else {
+        searchInput.blur();
+      }
+    }
+  </script>
+</body>
+</html>
